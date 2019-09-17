@@ -79,13 +79,10 @@ namespace YAF.Core
         /// </param>
         /// <param name="treatCacheKey">
         /// </param>
-        /// <param name="boardRepository">
-        /// The board Repository.
-        /// </param>
         public CurrentBoardSettings(
-            [NotNull] HttpApplicationStateBase applicationStateBase, 
-            [NotNull] IInjectServices injectServices, 
-            [NotNull] IHaveBoardID haveBoardId, 
+            [NotNull] HttpApplicationStateBase applicationStateBase,
+            [NotNull] IInjectServices injectServices,
+            [NotNull] IHaveBoardID haveBoardId,
             [NotNull] ITreatCacheKey treatCacheKey)
         {
             CodeContracts.VerifyNotNull(applicationStateBase, "applicationStateBase");
@@ -111,10 +108,10 @@ namespace YAF.Core
             get
             {
                 return this._applicationStateBase.GetOrSet(
-                    this._treatCacheKey.Treat(Constants.Cache.BoardSettings), 
+                    this._treatCacheKey.Treat(Constants.Cache.BoardSettings),
                     () =>
                         {
-                            var boardSettings = new YafLoadBoardSettings(this._haveBoardId.BoardID);
+                            var boardSettings = (YafBoardSettings)new YafLoadBoardSettings(this._haveBoardId.BoardID);
 
                             // inject
                             this._injectServices.Inject(boardSettings);

@@ -37,14 +37,9 @@ namespace YAF.Utils
     /// <summary>
     /// The class gets common system info. Used in data layers other than MSSQL. Created by vzrus 2010
     /// </summary>
-    public static class Platform
+    public static class YafSystemInfo
     {
         #region Constants and Fields
-
-        /// <summary>
-        /// The inited.
-        /// </summary>
-        private static bool inited;
 
         /// <summary>
         /// The is mono.
@@ -72,10 +67,7 @@ namespace YAF.Utils
         {
             get
             {
-                if (!inited)
-                {
-                    Init();
-                }
+                Init();
 
                 return isMono;
             }
@@ -95,10 +87,7 @@ namespace YAF.Utils
         {
             get
             {
-                if (!inited)
-                {
-                    Init();
-                }
+                Init();
 
                 return isMono ? "Mono" : ".NET";
             }
@@ -162,9 +151,24 @@ namespace YAF.Utils
         /// <returns>Returns the version string.</returns>
         private static string CheckFor45PlusVersion(int releaseKey)
         {
+            if (releaseKey >= 528040)
+            {
+                return "4.8 or later";
+            }
+
+            if (releaseKey >= 461808)
+            {
+                return "4.7.2";
+            }
+
+            if (releaseKey >= 461308)
+            {
+                return "4.7.1";
+            }
+
             if (releaseKey >= 460798)
             {
-                return "4.7 or later";
+                return "4.7";
             }
 
             if (releaseKey >= 394802)

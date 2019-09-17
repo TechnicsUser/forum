@@ -574,20 +574,14 @@ namespace YAF.Pages
                                 0);
 
                             // quoting a reply to a topic...
-                            foreach (
-                                var msg in
-                                    this.Get<IYafSession>()
-                                        .MultiQuoteIds.Select(
-                                            item =>
-                                            messages.AsEnumerable()
-                                                .Select(t => new TypedMessageList(t))
-                                                .Where(m => m.MessageID == item.MessageID))
-                                        .SelectMany(quotedMessage => quotedMessage))
-                            {
-                                this.InitQuotedReply(msg);
-                            }
+                            this.Get<IYafSession>().MultiQuoteIds
+                                .Select(
+                                    item => messages.AsEnumerable().Select(t => new TypedMessageList(t))
+                                        .Where(m => m.MessageID == item.MessageID))
+                                .SelectMany(quotedMessage => quotedMessage).ForEach(
+                                    this.InitQuotedReply);
 
-                            // Clear Multiquotes
+                            // Clear Multi-quotes
                             this.Get<IYafSession>().MultiQuoteIds = null;
                         }
                         else
@@ -690,7 +684,6 @@ namespace YAF.Pages
                                 File.Move(oldFilePath, newFilePath);
                             }
 
-
                             attach.MessageID = 0;
                             this.GetRepository<Attachment>().Update(attach);
                         });
@@ -740,7 +733,7 @@ namespace YAF.Pages
 
             // remove cache if it exists...
             this.Get<IDataCache>()
-                .Remove(string.Format(Constants.Cache.FirstPostCleaned, this.PageContext.PageBoardID,this.TopicId));
+                .Remove(string.Format(Constants.Cache.FirstPostCleaned, this.PageContext.PageBoardID, this.TopicId));
 
             return messageId;
         }
@@ -766,7 +759,7 @@ namespace YAF.Pages
             // Check if Forum is Moderated
             var isForumModerated = false;
 
-            var forumInfo = this.GetRepository<Types.Models.Forum>()
+            var forumInfo = this.GetRepository<Forum>()
                 .List(this.PageContext.PageBoardID, this.PageContext.PageForumID).FirstOrDefault();
             
             if (forumInfo != null)
@@ -847,7 +840,7 @@ namespace YAF.Pages
             // Check if Forum is Moderated
             var isForumModerated = false;
 
-            var forumInfo = this.GetRepository<Types.Models.Forum>()
+            var forumInfo = this.GetRepository<Forum>()
                 .List(this.PageContext.PageBoardID, this.PageContext.PageForumID).FirstOrDefault();
 
             if (forumInfo != null)
@@ -927,8 +920,6 @@ namespace YAF.Pages
             if (!this.PageContext.IsAdmin && !this.PageContext.ForumModeratorAccess
                 && !this.PageContext.BoardSettings.SpamServiceType.Equals(0))
             {
-                string spamResult;
-
                 // Check content for spam
                 if (
                     this.Get<ISpamCheck>().CheckPostForSpam(
@@ -938,7 +929,7 @@ namespace YAF.Pages
                             HtmlHelper.StripHtml(HtmlHelper.CleanHtmlString(this.ForumEditor.Text)))
                             .RemoveMultipleWhitespace(),
                         this.PageContext.IsGuest ? null : this.PageContext.User.Email,
-                        out spamResult))
+                        out var spamResult))
                 {
                     switch (this.PageContext.BoardSettings.SpamMessageHandling)
                     {
@@ -946,8 +937,7 @@ namespace YAF.Pages
                             this.Logger.Log(
                                 this.PageContext.PageUserID,
                                 "Spam Message Detected",
-                                string.Format(
-                                    "Spam Check detected possible SPAM ({1}) posted by User: {0}", this.PageContext.IsGuest ? this.From.Text : this.PageContext.PageUserName),
+                                $"Spam Check detected possible SPAM posted by User: {(this.PageContext.IsGuest ? this.From.Text : this.PageContext.PageUserName)}",
                                 EventLogTypes.SpamMessageDetected);
                             break;
                         case 1:
@@ -1100,18 +1090,19 @@ namespace YAF.Pages
             }
 
             // Check if message is approved
-            var isApproved = false;
-            using (var dt = this.GetRepository<Message>().ListAsDataTable(messageId.ToType<int>()))
+            var isApproved = this.GetRepository<Message>().GetById(messageId.ToType<int>()).MessageFlags.IsApproved;
+
+            /*using (var dt = this.GetRepository<Message>().ListAsDataTable(messageId.ToType<int>()))
             {
                 foreach (DataRow row in dt.Rows)
                 {
                     isApproved = row["Flags"].BinaryAnd(MessageFlags.Flags.IsApproved);
                 }
-            }
+            }*/
 
             // vzrus^ the poll access controls are enabled and this is a new topic - we add the variables
             var attachPollParameter = string.Empty;
-            var retforum = string.Empty;
+            var returnForum = string.Empty;
 
             if (this.PageContext.ForumPollAccess && this.PostOptions1.PollOptionVisible && newTopic > 0)
             {
@@ -1119,7 +1110,7 @@ namespace YAF.Pages
                 attachPollParameter = $"&t={newTopic}";
 
                 // new return forum poll token
-                retforum = $"&f={this.PageContext.PageForumID}";
+                returnForum = $"&f={this.PageContext.PageForumID}";
             }
 
             // Create notification emails
@@ -1225,7 +1216,7 @@ namespace YAF.Pages
                 }
                 else
                 {
-                    YafBuildLink.Redirect(ForumPages.polledit, "&ra=1{0}{1}", attachPollParameter, retforum);
+                    YafBuildLink.Redirect(ForumPages.polledit, "&ra=1{0}{1}", attachPollParameter, returnForum);
                 }
 
                 if (Config.IsRainbow)
@@ -1296,7 +1287,7 @@ namespace YAF.Pages
             }
 
             // get  forum information
-            var forumInfo = this.GetRepository<Types.Models.Forum>()
+            var forumInfo = this.GetRepository<Forum>()
                 .List(this.PageContext.PageBoardID, this.PageContext.PageForumID).FirstOrDefault();
 
             // Ederon : 9/9/2007 - moderator can edit in locked topics
@@ -1318,7 +1309,7 @@ namespace YAF.Pages
         private bool CanQuotePostCheck(Topic topicInfo)
         {
             // get topic and forum information
-            var forumInfo = this.GetRepository<Types.Models.Forum>()
+            var forumInfo = this.GetRepository<Forum>()
                 .List(this.PageContext.PageBoardID, this.PageContext.PageForumID).FirstOrDefault();
 
             if (topicInfo == null || forumInfo == null)
@@ -1525,7 +1516,7 @@ namespace YAF.Pages
         /// <returns>
         /// Returns if the forum needs to be moderated
         /// </returns>
-        private bool CheckForumModerateStatus(Types.Models.Forum forumInfo, bool isNewTopic)
+        private bool CheckForumModerateStatus(Forum forumInfo, bool isNewTopic)
         {
             var forumModerated = forumInfo.ForumFlags.IsModerated;
 
