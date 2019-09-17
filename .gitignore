@@ -14,6 +14,7 @@ db.config
 *.user
 *.sln.docstates
 
+db.config
 
 # Build results
 [Dd]ebug/
