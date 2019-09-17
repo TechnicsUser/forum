@@ -1,0 +1,116 @@
+﻿@import "jsdifflib.scss";
+@import "prism";
+@import "jquery.selectedQuoting";
+@import "jquery.hovercard.scss";
+@import "bootstrap-notify";
+@import "jquery.emojipicker";
+
+@import "fontawesome/fontawesome-all";
+@import "flag-icons/flag-icon.scss";
+
+// -- TableSorter Plugin
+@import "tablesorter/theme.bootstrap_4.min";
+@import "tablesorter/jquery.tablesorter.pager.min";
+
+// --Bootstrap extensions
+@import "select2/select2";
+@import "select2/select2-bootstrap";
+@import "jquery.bootstrap-touchspin";
+@import "bootstrap-datetimepicker";
+@import "blueimp-gallery";
+@import "bootstrap-image-gallery";
+@import "bootstrap-suggest.scss";
+
+// --Forum imports
+@import "forum/attachments-upload.scss";
+@import "forum/dropdowns.scss";
+@import "forum/editor.scss";
+@import "forum/user-albums.scss";
+@import "forum/social-icons.scss";
+@import "forum/cookie-alert.scss";
+@import "forum/button-scroll.scss";
+
+// -- Main
+#YafBody {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+// -- Topic Title
+.topic-title {
+    white-space: pre-wrap;
+}
+
+// -- MultiQuote Button
+.MultiQuoteButton{
+    display:inline-block;
+}
+
+// Radio Button Lists
+span.form-check {
+    padding: 0px;
+}
+
+span.form-check > input[type="radio"] {
+    margin: 8px -5px 7px 0px;
+    display: block;
+    float: left;
+}
+
+span.form-check > label {
+    margin-right: 5px;
+    margin-left: 5px;
+    padding: 0px 5px 0px 10px;
+    display: block;
+}
+
+.list-inline {
+    margin: 0;
+}
+
+// -- Main Menu
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+}
+
+// -- Similar topic lists
+.list-similar {
+    height: 200px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.navbar-round {
+    border-radius: 4px;
+    border: 1px solid #e7e7e7;
+}
+
+#passwordStrength {
+    padding: 0 .7em;
+
+    .PasswordStrengthMessageIcon {
+        display: inline-block;
+        vertical-align: bottom;
+        margin-right: .3em;
+    }
+}
+
+// -- Scrollable Mobile Dropdowns
+.scrollable-dropdown {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}
+
+// Small Avatars inside Posts
+.img-avatar-sm {
+    max-height: 40px;
+}
