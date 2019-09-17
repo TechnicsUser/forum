@@ -1981,6 +1981,7 @@
     <Content Include="error.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Images\Avatars\Common\SampleAvatar.gif" />
+    <Content Include="Images\Logos\YAFLogo.svg" />
     <Content Include="Images\Medals\award_star_bronze_3.png" />
     <Content Include="Images\Medals\award_star_bronze_3_small.png" />
     <Content Include="Images\Medals\award_star_gold_2.png" />
@@ -2003,7 +2004,6 @@
     <Content Include="Images\Medals\medal_silver_2.png" />
     <Content Include="Images\Medals\medal_silver_2_small.png" />
     <Content Include="Images\Medals\medal_small.png" />
-    <Content Include="Images\Logos\YAFLogo.svg" />
     <Content Include="Images\noavatar.svg" />
     <Content Include="install\custom\custom.sql" />
     <Content Include="install\custom\dnn.sql" />
@@ -3406,6 +3406,7 @@
     <Content Include="Content\Themes\flatly\bootstrap-forum.min.css.gz">
       <DependentUpon>bootstrap-forum.min.css</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -3415,7 +3416,7 @@
     <Content Include="Scripts\radEditor\toolsFile.xml" />
     <Content Include="Scripts\tinymce\tinymce_init.js" />
     <Content Include="Scripts\tinymce\tinymce_initbbcode.js" />
-    <Content Include="recommended.web.config">
+    <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Scripts\forum\yaf.MessageHistory.js" />
@@ -3440,9 +3441,6 @@
     <Content Include="v1.9.1.upgrade.web.config">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="web.config">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ServiceStack\ServiceStack.Interfaces\ServiceStack.Interfaces.csproj">
@@ -3711,7 +3709,7 @@ del Lucene.Net.Contrib.Memory.pdb</PostBuildEvent>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties bundleconfig_1json__JSONSchema="" compilerconfig_1json__JSONSchema="" />
+      <UserProperties compilerconfig_1json__JSONSchema="" bundleconfig_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets" Condition="Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" />
